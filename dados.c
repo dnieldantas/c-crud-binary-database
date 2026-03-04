@@ -3,6 +3,14 @@
 #include <string.h>
 #include <ctype.h>
 
+struct cadastro
+{
+    char nome[100];
+    char nascimento[11];
+    char email[50];
+    char telefone[25];
+};
+
 void capitalize(char palavra[])
 {
     for (int i = 0; palavra[i] != '\0'; i++)
@@ -22,41 +30,43 @@ int main()
         return 1;
     }
 
-    int i = 0;
+    struct cadastro c1;
+
     while (1)
     {
-        char nome[100];
-        char nascimento[11];
-        char email[30];
-        char telefone[25];
-
-        printf("Nome: ");
-        scanf(" %99[^\n]", nome);
-        capitalize(nome);
+        printf("\nNome: ");
+        scanf(" %99[^\n]", c1.nome);
+        capitalize(c1.nome);
 
         printf("Data de Nascimento (dd/mm/aaaa): ");
-        scanf(" %10s", nascimento);
+        scanf(" %10s", c1.nascimento);
 
         printf("E-mail: ");
-        scanf(" %29s", email);
+        scanf(" %29s", c1.email);
 
         printf("Telefone: ");
-        scanf(" %24s", telefone);
+        scanf(" %24s", c1.telefone);
 
-        int len_telefone = strlen(telefone);
-        char id[8] = {nome[0], nascimento[0], nascimento[1], nome[1], telefone[len_telefone - 2], telefone[len_telefone - 1], nome[2], '\0'};
+        printf("\nVerificar as informações:\n\n%s\n%s\n%s\n%s\n\n", c1.nome, c1.nascimento, c1.email, c1.telefone);
+        printf("O que deseja?\n\n[1] Confirmar\n[2] Editar informações\n[3] Cancelar e Sair\n\n");
+        int editar;
+        scanf(" %d", &editar);
+        if (editar == 2)
+        {
+            continue;
+        }
 
-        fprintf(dados, "%s\n", id);
-        fprintf(dados, "%s\n", nome);
-        fprintf(dados, "%s\n", nascimento);
-        fprintf(dados, "%s\n", email);
-        fprintf(dados, "%s\n\n", telefone);
+        else if (editar == 3)
+        {
+            break;
+        }
 
-        printf("\nCadastro de %s feito!\n\n", nome);
+        fprintf(dados, "Nome: %s\nData de Nascimento: %s\nE-mail: %s\nTelefone: %s\n\n", c1.nome, c1.nascimento, c1.email, c1.telefone);
+        printf("\nCadastro realizado com sucesso!\n\n");
 
         int novo;
         printf("Realizar novo cadastro?\n\n[1] Sim\n[2] Não\n\n");
-        scanf("%d", &novo);
+        scanf(" %d", &novo);
         if (novo == 2)
         {
             break;
