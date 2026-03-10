@@ -14,7 +14,7 @@ struct cadastro
 
 void division()
 {
-    printf("--------------------------------------------------");
+    printf("------------------------------------------------------------");
 }
 
 void capitalize(char palavra[])
@@ -27,13 +27,15 @@ void capitalize(char palavra[])
 
 int main()
 {
+    division();
+    printf("\nBEM-VINDO AO CADASTRAMENTO EM BANCO DE DADOS");
     while (1)
     {
         printf("\n");
         division();
         printf("\nMENU PRINCIPAL\n");
         division();
-        printf("\n[1] Adicionar\n[2] Consultar\n[3] Editar\n[4] Apagar\n[5] Sair\n\n");
+        printf("\n[1] Adicionar\n[2] Consultar\n[3] Editar\n[4] Deletar\n[5] Ver tudo\n[6] Deletar Tudo\n[7] Sair\n\n");
         int inicio;
         scanf(" %d", &inicio);
 
@@ -42,7 +44,7 @@ int main()
         struct cadastro c1;
         if (inicio == 1)
         {
-            banco = fopen("banco.dat", "wb");
+            banco = fopen("banco.dat", "ab");
             if (banco == NULL)
             {
                 printf("Erro ao abrir arquivo.\n");
@@ -108,7 +110,7 @@ int main()
                 return 1;
             }
 
-            char busca[100];
+            char busca[20];
 
             while (1)
             {
@@ -160,7 +162,7 @@ int main()
                 return 1;
             }
 
-            char busca[100];
+            char busca[20];
             int loops = 0;
 
             while (loops == 0) // loop de repeticao dentro do arquivo; permite editar diferentes cadastros de acordo com o cpf
@@ -274,7 +276,7 @@ int main()
                         {
                             loops = 1;
                         }
-                        if (loops = 1)
+                        if (loops == 1)
                         {
                             break;
                         }
@@ -283,7 +285,8 @@ int main()
                             fseek(banco, -sizeof(struct cadastro), SEEK_CUR);
                             fwrite(&c1, sizeof(struct cadastro), 1, banco);
                             fseek(banco, -sizeof(struct cadastro), SEEK_CUR);
-                            printf("\nEdição realizada com sucesso!\n\n");
+                            division();
+                            printf("\nEdição realizada com sucesso!\n");
                             division();
                         }
 
@@ -304,19 +307,155 @@ int main()
             fclose(banco);
         }
 
-        /*else if (inicio == 4)
+        else if (inicio == 4)
         {
-            // deletar
-        }*/
+            while (1)
+            {
+                FILE *temp;
+                temp = fopen("temp.dat", "wb");
+                if (temp == NULL)
+                {
+                    printf("Erro ao abrir arquivo temporário.\n");
+                    return 1;
+                }
+                banco = fopen("banco.dat", "rb");
+                if (banco == NULL)
+                {
+                    printf("Erro ao abrir arquivo.\n");
+                    return 1;
+                }
 
+                char busca[20];
+
+                division();
+                printf("\nDigite o CPF para deletar cadastro: ");
+                scanf(" %19s", busca);
+
+                int encontrado = 0;
+
+                while (fread(&c1, sizeof(struct cadastro), 1, banco))
+                {
+                    if (strcmp(c1.cpf, busca) == 0)
+                    {
+                        encontrado = 1;
+                        division();
+                        printf("\nVerificar as informações:\n\n%s\n%s\n%s\n%s\n%s\n", c1.nome, c1.nascimento, c1.cpf, c1.email, c1.telefone);
+                        division();
+                    }
+                }
+
+                if (encontrado == 0)
+                {
+                    division();
+                    printf("\nCadastro não encontrado.\n");
+                    division();
+                    printf("\nTentar outro CPF?\n\n[1] Sim\n[2] Voltar ao Menu\n\n");
+                    int novaconsulta;
+                    scanf(" %d", &novaconsulta);
+                    if (novaconsulta == 2)
+                    {
+                        break;
+                    }
+                }
+
+                else
+                {
+                    printf("\nTem certeza que deseja deletar o cadastro?\n\n[1] Deletar Permanentemente\n[2] Cancelar\n\n");
+                    int delete;
+                    scanf(" %d", &delete);
+                    if (delete == 2)
+                    {
+                        printf("\nCadastro não deletado.\n");
+                        break;
+                    }
+
+                    rewind(banco);
+
+                    while (fread(&c1, sizeof(struct cadastro), 1, banco))
+                    {
+                        if (strcmp(c1.cpf, busca) != 0)
+                        {
+                            fwrite(&c1, sizeof(struct cadastro), 1, temp);
+                        }
+                    }
+
+                    fclose(banco);
+                    fclose(temp);
+
+                    remove("banco.dat");
+                    rename("temp.dat", "banco.dat");
+
+                    division();
+                    printf("\nCadastro deletado com sucesso!\n");
+                    division();
+
+                    int novo;
+                    printf("\nDeletar mais cadastros?\n\n[1] Sim\n[2] Voltar ao Menu\n\n");
+                    scanf(" %d", &novo);
+                    if (novo == 2)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
         else if (inicio == 5)
+        {
+            banco = fopen("banco.dat", "ab+");
+
+            if (banco == NULL)
+            {
+                printf("Erro ao abrir arquivo.\n");
+                return 1;
+            }
+
+            int encontrou = 0;
+
+            rewind(banco);
+
+            while (fread(&c1, sizeof(struct cadastro), 1, banco))
+            {
+                if (encontrou == 0)
+                    division();
+
+                printf("\n%s\n%s\n%s\n%s\n%s\n", c1.nome, c1.nascimento, c1.cpf, c1.email, c1.telefone);
+                division();
+
+                encontrou = 1;
+            }
+
+            if (encontrou == 0)
+            {
+                division();
+                printf("\nNão há cadastros registrados.");
+            }
+            fclose(banco);
+        }
+
+        else if (inicio == 6)
+        {
+            int deleteall;
+            division();
+            printf("\nVocê tem certeza que quer deletar todos os cadastros?\n\n[1] Deletar Tudo\n[2] Cancelar\n\n");
+            scanf(" %d", &deleteall);
+            if (deleteall == 1)
+            {
+                remove("banco.dat");
+                printf("\nTodos os cadastros foram permanentemente deletados.");
+            }
+            else{
+                printf("\nOs cadastros foram mantidos.");
+            }
+        }
+
+        else if (inicio == 7)
         {
             break;
         }
 
         else
         {
-            printf("\nTente uma opção válida.\n");
+            printf("\nTente uma opção válida para iniciar.\n");
         }
     }
 }
