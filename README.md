@@ -7,9 +7,12 @@ Features:
 
 Compilation:
 
-English Version: gcc crud_database.c -o crud_database
+- English Version: gcc crud_database.c -o crud_database
 
-Portuguese Version: gcc crud_banco_de_dados.c -o crud_banco_de_dados
+- Portuguese Version: gcc crud_banco_de_dados.c -o crud_banco_de_dados
 
 Run:
-./crud_database
+
+- English Version: ./crud_database
+
+- Portuguese Version: ./crud_banco_de_dados
