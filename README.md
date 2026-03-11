@@ -6,6 +6,7 @@ Features:
 - Each record contains the following information: Full Name, Birthdate, CPF, Email, and Phone Number.
 
 Compilation:
+
 English Version: gcc crud_database.c -o crud_database
 
 Portuguese Version: gcc crud_banco_de_dados.c -o crud_banco_de_dados
