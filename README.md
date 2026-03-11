@@ -4,3 +4,9 @@ Features:
 - Create, Read, Update, and Delete records in a binary database through a terminal interface;
 - Search system based on the brazilian identification number called Cadastro de Pessoa Física (CPF), which is unique for every citizen;
 - Each record contains the following information: Full Name, Birthdate, CPF, Email, and Phone Number.
+
+Compilation:
+gcc crud_database.c -o crud_database
+
+Run:
+./crud_database
